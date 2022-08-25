@@ -11,7 +11,7 @@ from rest_framework.permissions import *
 from django.contrib.auth.models import User
 from django_apscheduler.models import DjangoJob, DjangoJobExecution
 
-from .scheduler import scheduler
+from . import scheduler
 from .models import JobExe
 from .serializers import JobSerializer, ExecutionSerializer
 
@@ -89,3 +89,9 @@ def delete_job(request, job_id):
     scheduler.remove_job(job_id=job_id)
     return Response({"message" : "deleted"}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAdminUser])
+def start_scheduler(request):
+    scheduler.start()
+    return Response({"message" : "ok"})
