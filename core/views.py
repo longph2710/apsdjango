@@ -11,7 +11,7 @@ from rest_framework.permissions import *
 from django.contrib.auth.models import User
 from django_apscheduler.models import DjangoJob, DjangoJobExecution
 
-from . import scheduler
+from .scheduler import django_scheduler as scheduler
 from .models import JobExe
 from .serializers import JobSerializer, ExecutionSerializer
 

@@ -11,7 +11,7 @@ import redis
 
 # config lock 
 conn = redis.Redis()
-lock_scheduler = redis_lock.Lock(conn, name='django-scheduler-locker-01', expire=100)
+lock_scheduler = redis_lock.Lock(conn, name='django-scheduler-locker-01', expire=50)
 
 # config scheduler
 mem_scheduler = BackgroundScheduler()
@@ -46,7 +46,7 @@ def check_lock_scheduler():
         print('someone has lock scheduler!')
 
 def start():
-    if not mem_scheduler.running:
+    if not mem_scheduler.running and settings.SCHEDULER_AUTOSTART:
         print('start memory scheduler!')
         mem_scheduler.add_job(
             id='checking-lock-scheduler', 
