@@ -101,7 +101,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '1',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '3306',
     }
 }
 
@@ -154,9 +154,22 @@ SCHEDULER_CONFIG = {
     "apscheduler.jobstores.default": {
         "class": "django_apscheduler.jobstores:DjangoJobStore"
     },
+    "apscheduler.jobstores.memory": {
+        "class": "django_apscheduler.jobstores:DjangoMemoryJobStore"
+    },
     'apscheduler.executors.processpool': {
         "type": "threadpool"
     },
 }
 
 SCHEDULER_AUTOSTART = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_lock.django_cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        }
+    }
+}

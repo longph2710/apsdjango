@@ -8,4 +8,6 @@ urlpatterns = [
     path('jobs/create', views.create_job),
     path('jobs/delete_all', views.delete_all_job),
     path('jobs/delete/<str:job_id>', views.delete_job),
+
+    path('scheduler/start', views.start_scheduler)
 ]
