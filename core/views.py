@@ -7,13 +7,14 @@ from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import *
+from rest_framework import generics
 
 from django.contrib.auth.models import User
 from django_apscheduler.models import DjangoJob, DjangoJobExecution
 
 from .scheduler import django_scheduler as scheduler
-from .models import JobExe
-from .serializers import JobSerializer, ExecutionSerializer
+from .models import *
+from .serializers import *
 
 import json
 # Create your views here.
@@ -66,8 +67,8 @@ def create_job(request):
         # id=job_id,                          # job id
         trigger='interval',                 # job trigger
         **data,                             # define time for trigger
-        func=JobExe.job_backup_01,          # func of job to run
-        kwargs=data,                   # kwargs of func
+        func=JobExe.call_backup_api,          # func of job to run
+        kwargs={"database_id": data.get('id')},                   # kwargs of func
         replace_existing=True               # replace job if job id is exsited  
     )
 
@@ -95,3 +96,7 @@ def delete_job(request, job_id):
 def start_scheduler(request):
     scheduler.start()
     return Response({"message" : "ok"})
+
+class BackupHistoryAPIListCreate(generics.ListCreateAPIView):
+    queryset = BackupHistory.objects.all()
+    serializer_class = BackupSerializer
